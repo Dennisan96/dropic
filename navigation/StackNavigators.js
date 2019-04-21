@@ -8,6 +8,7 @@ import TabBarIcon from '../components/TabBarIcon';
 import SharesScreen from '../screens/SharesScreen';
 import ContactsScreen from '../screens/ContactsScreen';
 import AddScreen from '../screens/AddScreen';
+import PhotoScreen from '../screens/PhotoScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 
@@ -47,6 +48,19 @@ AddStack.navigationOptions = {
     <TabBarIcon
       focused={focused}
       name={Platform.OS === 'ios' ? 'ios-add-circle' : 'md-add-circle'}
+    />
+  ),
+};
+
+export const PhotoStack = createStackNavigator({
+  Photo: PhotoScreen,
+});
+PhotoStack.navigationOptions = {
+  tabBarLabel: 'Photos',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS === 'ios' ? 'ios-photos' : 'md-photos'}
     />
   ),
 };

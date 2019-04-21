@@ -6,9 +6,9 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
-  Button
+  View
 } from 'react-native';
+import FA_Icon from '../components/FontAwesomeIcons';
 import { WebBrowser } from 'expo';
 
 
@@ -19,11 +19,11 @@ export default class SharesScreen extends React.Component {
     return {
       title: 'Shares',
       headerLeft: (
-        <Button
+        <TouchableOpacity
           onPress={() => navigation.toggleDrawer()}
-          title="Menu"
-          color="#000"
-        />
+        >
+          <FA_Icon name={'user-secret'} />
+        </TouchableOpacity>
       )
     }
   };
