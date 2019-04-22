@@ -1,5 +1,6 @@
 import React from 'react';
-import { ScrollView, Text, StyleSheet } from 'react-native';
+import { Button, Image, View } from 'react-native';
+import { ImagePicker } from 'expo';
 
 
 export default class AddScreen extends React.Component {
@@ -7,19 +8,38 @@ export default class AddScreen extends React.Component {
     title: 'Add',
   };
 
+  state = {
+    image: null,
+  };
+
   render() {
+    let { image } = this.state;
+
     return (
-      <ScrollView style={styles.container}>
-        <Text>Add Screen</Text>
-      </ScrollView>
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Button
+          title="Pick an image from camera roll"
+          onPress={this._launchCameraRollAsync}
+        />
+        {image &&
+          <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+      </View>
     );
   }
-}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 15,
-    backgroundColor: '#fff',
-  },
-});
+  _launchCameraRollAsync = async () => {
+    let {status} = await Expo.Permissions.askAsync(Expo.Permissions.CAMERA_ROLL);
+
+    if (status !== 'granted') {
+      console.error("Camera Roll permission not granted");
+      return;
+    }
+    
+    let result = await ImagePicker.launchImageLibraryAsync();
+    console.log(result);
+
+    if (!result.cancelled) {
+      this.setState({ image: result.uri });
+    }
+  };
+}
