@@ -12,6 +12,7 @@ import PhotoScreen from '../screens/PhotoScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import TripScreen from '../screens/TripScreen';
+import { SignInScreen } from '../screens/AuthScreen';
 
 
 export const SharesStack = createStackNavigator({
@@ -82,4 +83,8 @@ SettingsStack.navigationOptions = {
 
 export const ProfileStack = createStackNavigator({
   Profile: ProfileScreen,
+});
+
+export const AuthStack = createStackNavigator({
+  Auth: SignInScreen,
 });

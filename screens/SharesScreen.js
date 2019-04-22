@@ -18,7 +18,7 @@ import { MonoText } from '../components/StyledText';
 export default class SharesScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      title: 'Shares',
+      title: 'Sharing Trips',
       headerLeft: (
         <TouchableOpacity
           onPress={() => navigation.toggleDrawer()}
