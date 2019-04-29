@@ -5,10 +5,6 @@ import { AuthStack } from './StackNavigators';
 
 export default createAppContainer(createSwitchNavigator(
   {
-    App: DrawerNavigator,
-    AuthStack
-  },
-  {
-    initialRouteName: 'AuthStack'
+    App: DrawerNavigator
   }
 ));

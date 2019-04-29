@@ -1,0 +1,14 @@
+{
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "photorganizer-20190428162324-authRole",
+            "UnauthRoleArn": "arn:aws:iam::370740074467:role/photorganizer-20190428162324-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::370740074467:role/photorganizer-20190428162324-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "photorganizer-20190428162324-deployment",
+            "UnauthRoleName": "photorganizer-20190428162324-unauthRole",
+            "StackName": "photorganizer-20190428162324",
+            "StackId": "arn:aws:cloudformation:us-east-1:370740074467:stack/photorganizer-20190428162324/79768290-69f3-11e9-b0ec-0a16600979f0"
+        }
+    }
+}

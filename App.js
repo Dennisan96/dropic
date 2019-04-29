@@ -2,9 +2,17 @@ import React from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
+import Amplify, { Auth } from 'aws-amplify';
+import { withAuthenticator, SignIn, MyCustomSignUp } from 'aws-amplify-react-native'
+import awsmobile from './aws-exports';
+Amplify.configure(awsmobile);
+
+// import Amplify from '@aws-amplify/core'
+// import config from './aws-exports'
+// Amplify.configure(config)
 
 
-export default class App extends React.Component {
+class App extends React.Component {
   state = {
     isLoadingComplete: false,
   };
@@ -54,6 +62,10 @@ export default class App extends React.Component {
     this.setState({ isLoadingComplete: true });
   };
 }
+
+export default withAuthenticator(App, { 
+  includeGreetings: true,
+})
 
 const styles = StyleSheet.create({
   container: {
