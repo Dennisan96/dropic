@@ -12,12 +12,14 @@ import PhotoScreen from '../screens/PhotoScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import TripScreen from '../screens/TripScreen';
+import GalleryScreen from '../screens/GalleryScreen';
 import { SignInScreen } from '../screens/AuthScreen';
 
 
 export const SharesStack = createStackNavigator({
   Shares: SharesScreen,
-  Trip: TripScreen
+  Trip: TripScreen,
+  Gallery: GalleryScreen
 });
 SharesStack.navigationOptions = {
   tabBarLabel: 'Shares',

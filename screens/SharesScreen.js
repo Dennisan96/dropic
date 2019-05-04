@@ -62,7 +62,10 @@ export default class SharesScreen extends React.Component {
           style={styles.itemContainer}
           onPress={() => this.props.navigation.push(
             'Trip',
-            {tripName: tripInfo.tripName}
+            {
+              tripName: tripInfo.tripName,
+              tripId: tripInfo.tripId
+            }
           )}
         >
           <Text>
