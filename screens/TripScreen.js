@@ -1,15 +1,25 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
-// import { NavigationActions } from 'react-navigation';
-// import Gallery from 'react-native-image-gallery';
+import { TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { FlatGrid } from 'react-native-super-grid';
 import { ScrollView } from 'react-native-gesture-handler';
+import { Icon } from 'expo';
+import HeaderButtons, { HeaderButton, Item } from 'react-navigation-header-buttons';
 
+
+const IoniconsHeaderButton = passMeFurther => (
+  <HeaderButton {...passMeFurther} IconComponent={Icon.Ionicons} iconSize={23} color="#2f95dc" />
+);
 
 export default class TripScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       title: navigation.getParam('tripName'),
+      headerRight: (
+        <HeaderButtons HeaderButtonComponent={IoniconsHeaderButton}>
+          <Item title="add photo" iconName="ios-add-circle-outline" onPress={() => navigation.push('PhotoPicker')} />
+          <Item title="invite friend" iconName="ios-person-add" onPress={() => navigation.push('InviteFriends')} />
+        </HeaderButtons>
+      )
     }
   };
 
@@ -49,7 +59,7 @@ export default class TripScreen extends React.Component {
                 'Gallery',
                 {
                   tripName: navigation.getParam('tripName'),
-                  images: images,
+                  imageUrls: images.map(image => ({'url': image.source.uri})),
                   index: index
                 }
               )}

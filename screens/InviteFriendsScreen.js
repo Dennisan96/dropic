@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { ScrollView, View, TouchableOpacity, FlatList, ActivityIndicator } from "react-native";
-import { ListItem, SearchBar } from "react-native-elements";
+import { ListItem, SearchBar, CheckBox } from "react-native-elements";
 import { Icon } from 'expo';
 import HeaderButtons, { HeaderButton, Item } from 'react-navigation-header-buttons';
 
@@ -9,13 +9,13 @@ const IoniconsHeaderButton = passMeFurther => (
   <HeaderButton {...passMeFurther} IconComponent={Icon.Ionicons} iconSize={23} color="#2f95dc" />
 );
 
-export default class ContactsScreen extends Component {
+export default class InviteFriendsScreen extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      title: 'Friends',
+      title: 'Invite Friends',
       headerRight: (
         <HeaderButtons HeaderButtonComponent={IoniconsHeaderButton}>
-          <Item title="add friend" iconName="ios-person-add" onPress={() => navigation.push('AddFriend')} />
+          <Item title="Done" onPress={() => navigation.goBack()} />
         </HeaderButtons>
       )
     }
@@ -30,7 +30,9 @@ export default class ContactsScreen extends Component {
       page: 1,
       seed: 1,
       error: null,
-      refreshing: false
+      refreshing: false,
+      checklist: null,
+      inviteList: []
     };
   }
 
@@ -50,7 +52,8 @@ export default class ContactsScreen extends Component {
           data: page === 1 ? res.results : [...this.state.data, ...res.results],
           error: res.error || null,
           loading: false,
-          refreshing: false
+          refreshing: false,
+          checklist: page === 1 ? Array(res.results.length).fill(false) : [...this.state.checklist, ...Array(res.results.length).fill(false)]
         });
       })
       .catch(error => {
@@ -115,18 +118,32 @@ export default class ContactsScreen extends Component {
     );
   };
 
+  handleCheckBoxPress = (index) => {
+    let newChecklist = this.state.checklist;
+    newChecklist[index] = !newChecklist[index];
+    this.setState({ checklist: newChecklist });
+  }
+
   render() {
+    const { checklist } = this.state;
+
     return (
       <ScrollView containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}>
         <FlatList
           data={this.state.data}
-          renderItem={({ item }) => (
+          extraData={this.state}
+          renderItem={({ item, index }) => (
             <ListItem
               roundAvatar
               title={`${item.name.first} ${item.name.last}`}
-              subtitle={item.email}
+              subtitle={`${item.email}`}
               leftAvatar={{ source: { uri: item.picture.thumbnail } }}
               containerStyle={{ borderBottomWidth: 0 }}
+              checkBox={{
+                size: 20,
+                checked: checklist[index],
+                onPress: () => this.handleCheckBoxPress(index)
+              }}
             />
           )}
           keyExtractor={item => item.email}

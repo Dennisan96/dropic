@@ -23,7 +23,8 @@ export default class AddScreen extends React.Component {
           onPress={this._launchCameraRollAsync}
         />
         {imageUri &&
-          <Image source={{ uri: imageUri }} style={{ width: 200, height: 200 }} />}
+          <Image source={{ uri: imageUri }} style={{ width: 200, height: 200 }} />
+        }
       </View>
     );
   }

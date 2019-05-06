@@ -9,16 +9,13 @@ import {
   View
 } from 'react-native';
 import FA_Icon from '../components/FontAwesomeIcons';
-import { WebBrowser } from 'expo';
-
-
-import { MonoText } from '../components/StyledText';
 
 
 export default class SharesScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       title: 'Sharing Trips',
+      headerBackTitle: ' ',
       headerLeft: (
         <TouchableOpacity
           onPress={() => navigation.toggleDrawer()}

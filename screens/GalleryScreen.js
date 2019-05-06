@@ -1,5 +1,5 @@
 import React from 'react';
-import Gallery from 'react-native-image-gallery';
+import ImageViewer from 'react-native-image-zoom-viewer';
 
 
 export default class GalleryScreen extends React.Component {
@@ -13,10 +13,15 @@ export default class GalleryScreen extends React.Component {
     const { navigation } = this.props;
 
     return (
-      <Gallery
-        style={{ flex: 1, backgroundColor: 'black' }}
-        images={navigation.getParam('images')}
-        initialPage={navigation.getParam('index')}
+      <ImageViewer
+        // style={{ flex: 1, backgroundColor: 'black' }}
+        imageUrls={navigation.getParam('imageUrls')}
+        index={navigation.getParam('index')}
+        enableSwipeDown={true}
+        onCancel={navigation.goBack}
+        swipeDownThreshold={180}
+        // renderArrowLeft
+        // renderArrowRight
       />
     );
   }
