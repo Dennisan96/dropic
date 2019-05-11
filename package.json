@@ -24,7 +24,8 @@
     "react-native-super-grid": "^3.0.4",
     "react-native-uuid": "^1.4.9",
     "react-navigation": "^3.0.9",
-    "react-navigation-header-buttons": "^2.3.1"
+    "react-navigation-header-buttons": "^2.3.1",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "babel-preset-expo": "^5.0.0",

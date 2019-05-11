@@ -13,6 +13,7 @@ import PhotoScreen from '../screens/PhotoScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import TripScreen from '../screens/TripScreen';
+import AddTripScreen from '../screens/AddTripScreen';
 import PhotoPickerScreen from '../screens/PhotoPickerScreen';
 import InviteFriendsScreen from '../screens/InviteFriendsScreen';
 import GalleryScreen from '../screens/GalleryScreen';
@@ -21,6 +22,7 @@ import { SignInScreen } from '../screens/AuthScreen';
 
 export const SharesStack = createStackNavigator({
   Shares: SharesScreen,
+  AddTrip: AddTripScreen,
   Trip: TripScreen,
   Gallery: GalleryScreen,
   PhotoPicker: PhotoPickerScreen,

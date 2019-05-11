@@ -9,10 +9,22 @@ import {
   View
 } from 'react-native';
 import FA_Icon from '../components/FontAwesomeIcons';
+import { Input, Overlay } from 'react-native-elements';
+
+import { Icon } from 'expo';
+import HeaderButtons, { HeaderButton, Item } from 'react-navigation-header-buttons';
+
+import { createNewTrip, GetTripList } from '../components/api/api';
+
+
+const IoniconsHeaderButton = passMeFurther => (
+  <HeaderButton {...passMeFurther} IconComponent={Icon.Ionicons} iconSize={23} color="#2f95dc" />
+);
 
 
 export default class SharesScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
+    const {params = {}} = navigation.state;
     return {
       title: 'Sharing Trips',
       headerBackTitle: ' ',
@@ -22,8 +34,27 @@ export default class SharesScreen extends React.Component {
         >
           <FA_Icon name={'user-secret'} />
         </TouchableOpacity>
+      ),
+      headerRight: (
+        <HeaderButtons HeaderButtonComponent={IoniconsHeaderButton}>
+          <Item title="add trip" iconName="ios-add-circle-outline" onPress={params.handleAddTripBtn} />
+        </HeaderButtons>
       )
     }
+  };
+
+  componentWillMount() {
+    GetTripList('user-uuid-fake-sheldon');
+  }
+
+  componentDidMount() {
+    this.props.navigation.setParams({
+        handleAddTripBtn: () => this.setState({ isVisible: true })
+    });
+  }
+
+  state = {
+    isVisible: false
   };
 
   tripList = [
@@ -40,6 +71,12 @@ export default class SharesScreen extends React.Component {
       tripBuddies:  ["An Da", "Zhang Chi"]
     }
   ];
+
+  handleNewTripCreate = () => {
+    this.setState({ isVisible: false});
+    // create new trip via api
+    createNewTrip(this.state.newTripName);
+  }
 
   render() {
     let tripItems = []
@@ -76,9 +113,23 @@ export default class SharesScreen extends React.Component {
     }
 
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         {tripItems}
-      </View>
+        <Overlay 
+          isVisible={this.state.isVisible}
+          width="auto"
+          height="auto"
+          onBackdropPress={() => this.setState({ isVisible: false })}
+        >
+          <Input
+            label="Type in a cool name for your new trip!"
+            placeholder='TRIP NAME'
+            onChangeText={(text) => this.setState({newTripName: text})}
+            value={this.state.text}
+            onSubmitEditing={this.handleNewTripCreate}
+          />
+        </Overlay>
+      </ScrollView>
     );
   }
 }

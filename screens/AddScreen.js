@@ -63,7 +63,7 @@ export default class AddScreen extends React.Component {
       fetch('https://8gqr11z8n1.execute-api.us-east-1.amazonaws.com/v01/img', {
         method: 'POST',
         headers: {
-          Accept: 'application/json',
+          'Accept': 'application/json',
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(
