@@ -35,12 +35,16 @@ export default class InviteFriendsScreen extends Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     getFriendList('user-uuid-fake-sheldon')
     .then((res) => {
       // console.log(res);
       this.setState({ friendList: res })
-        getFriendsInfo(res);
+        getFriendsInfo(res)
+        .then((res) => this.setState({ 
+          friendList: res,
+          checklist: Array(res.length).fill(false)
+        }));
     });
   }
 
@@ -65,17 +69,21 @@ export default class InviteFriendsScreen extends Component {
   }
 
   render() {
-    const { checklist } = this.state;
+    const { checklist, friendList } = this.state;
+
+    if(!friendList || !checklist){
+      return null;
+   }
 
     return (
       <ScrollView containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}>
         <FlatList
-          data={this.state.data}
+          data={friendList}
           extraData={this.state}
           renderItem={({ item, index }) => (
             <ListItem
               roundAvatar
-              title={`${item.name.first} ${item.name.last}`}
+              title={`${item.firstName} ${item.lastName}`}
               subtitle={`${item.email}`}
               leftAvatar={{ title: 'NB' }}
               containerStyle={{ borderBottomWidth: 0 }}
@@ -86,7 +94,7 @@ export default class InviteFriendsScreen extends Component {
               }}
             />
           )}
-          keyExtractor={item => item.email}
+          keyExtractor={item => item.id}
           ItemSeparatorComponent={this.renderSeparator}
         />
       </ScrollView>

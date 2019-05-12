@@ -112,10 +112,13 @@ export function getFriendsInfo(friendList) {
         infoList.push(promise);
     });
 
-    Promise.all(infoList)
-    .then(values => {
-        console.log(values)
-    }); 
+    return new Promise((resolve) => {
+        Promise.all(infoList)
+        .then(values => {
+            resolve(values);
+        })
+        .catch((err) => console.log(err));
+    })
 }
 
 
