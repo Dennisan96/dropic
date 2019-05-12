@@ -17,7 +17,14 @@ export default class TripScreen extends React.Component {
       headerRight: (
         <HeaderButtons HeaderButtonComponent={IoniconsHeaderButton}>
           <Item title="add photo" iconName="ios-add-circle-outline" onPress={() => navigation.push('PhotoPicker')} />
-          <Item title="invite friend" iconName="ios-person-add" onPress={() => navigation.push('InviteFriends')} />
+          <Item 
+            title="invite friend" 
+            iconName="ios-person-add" 
+            onPress={() => navigation.push('InviteFriends', {
+              tripName: navigation.getParam('tripName'),
+              tripId: navigation.getParam('tripId')
+            })} 
+          />
         </HeaderButtons>
       )
     }

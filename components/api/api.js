@@ -3,6 +3,7 @@ import uuid from 'uuid';
 
 
 const URL = 'http://cloudphoto.us-east-1.elasticbeanstalk.com';
+const imgUploadURL = 'https://8gqr11z8n1.execute-api.us-east-1.amazonaws.com/v01/img';
 
 export function createNewTrip(newTripName) {
     const tripId = uuid.v1();
@@ -96,6 +97,31 @@ export function getFriendList(userId) {
     })
 };
 
+export function inviteFriends(tripId, addList) {
+    let promiseList = [];
+    addList.forEach((friendId, idx) => {
+        const queryURL = URL + `/trips/addMember?memberId=${friendId}&tripId=${tripId}`;
+        console.log(queryURL);
+        let promise = new Promise(resolve => {
+            _asyncGetReq(queryURL)
+            .then((response) => {
+                console.log(response.ok);
+                resolve(response);
+            })
+            .catch((err) => console.log(err));
+        });
+        promiseList.push(promise);
+    });
+
+    return new Promise((resolve) => {
+        Promise.all(promiseList)
+        .then(()=> {
+            resolve();
+        })
+        .catch((err) => console.log(err));
+    })
+};
+
 export function getFriendsInfo(friendList) {
     let infoList = [];
     friendList.forEach((friendId, idx) => {
@@ -104,7 +130,7 @@ export function getFriendsInfo(friendList) {
             _asyncGetReq(queryURL)
             .then((response) => response.json())
             .then((response) => {
-                const {friends, profilePhotoId, trips, ...partialObject} = response;
+                const {friends, trips, ...partialObject} = response;
                 resolve(partialObject);
             })
             .catch((err) => console.log(err));
@@ -121,6 +147,48 @@ export function getFriendsInfo(friendList) {
     })
 }
 
+export function uploadImages(msgList) {
+    const bodyParams = {"messages": msgList};
+    _asyncPostReq(imgUploadURL, bodyParams)
+    .then((response) => response.json())
+    .then((responseJson) => {
+        console.log(responseJson);
+    })
+
+
+    // const body = {
+    //     "messages": [
+    //       {
+    //         "msg_id": "test-img-from-frontend",
+    //         "img_id": "",
+    //         "img": result.base64,
+    //         "timestamp": Date.now(),
+    //         "width": result.width,
+    //         "height": result.height,
+    //         "Schema": "Image"
+    //       }
+    //     ]
+    // }
+
+    //   fetch('https://8gqr11z8n1.execute-api.us-east-1.amazonaws.com/v01/img', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Accept': 'application/json',
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify(
+    //       body
+    //     ),
+    //   })
+    //   .then((response) => response.json())
+    //   .then((responseJson) => {
+    //     console.log(responseJson.messages[0].img_id);
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
+}
+
 
 function _asyncGetReq(endpoint) {
     return new Promise((resolve, reject) => {
@@ -135,11 +203,11 @@ function _asyncGetReq(endpoint) {
             if (response.ok) {
                 resolve(response);
             } else {
-                reject('promise rej as post req not ok');
+                reject('promise rej as get req not ok');
             }
         })
         .catch((error) => {
-            reject('promise rej as post req error: ' + error);
+            reject('promise rej as get req error: ' + error);
         });
     });
 };

@@ -168,7 +168,7 @@ export default class SharesScreen extends React.Component {
                 'Trip',
                 {
                   tripName: item[1],
-                  tripId: item[1]
+                  tripId: item[0]
                 }
               )}
             />

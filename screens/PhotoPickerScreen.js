@@ -4,12 +4,29 @@ import {
   Text,
   View
 } from 'react-native';
+import { ImageManipulator, Icon } from 'expo';
 
 import CameraRollPicker from 'react-native-camera-roll-picker';
 
+import HeaderButtons, { HeaderButton, Item } from 'react-navigation-header-buttons';
+import { uploadImages } from '../components/api/api';
+
+
+const IoniconsHeaderButton = passMeFurther => (
+  <HeaderButton {...passMeFurther} IconComponent={Icon.Ionicons} iconSize={23} color="#2f95dc" />
+);
+
 export default class PhotoPickerScreen extends Component {
-  static navigationOptions = {
-    title: 'Camera Roll',
+  static navigationOptions = ({ navigation }) => {
+    const {params = {}} = navigation.state;
+    return {
+      title: 'Camera Roll',
+      headerRight: (
+        <HeaderButtons HeaderButtonComponent={IoniconsHeaderButton}>
+          <Item title="Done" onPress={params.handleDoneBtn} />
+        </HeaderButtons>
+      )
+    }
   };
 
   constructor(props) {
@@ -18,9 +35,49 @@ export default class PhotoPickerScreen extends Component {
     this.state = {
       num: 0,
       selected: [],
+      uploading: false
     };
 
     this.getSelectedImages = this.getSelectedImages.bind(this);
+  }
+
+  componentDidMount() {
+    const { navigation } = this.props;
+    navigation.setParams({
+        handleDoneBtn: async () => {
+
+          if (this.state.selected) {
+            this.setState({ uploading: true });
+
+            const pArray = this.state.selected.map(async item => {
+              const res = await ImageManipulator.manipulateAsync(
+                item.uri,
+                [],
+                { compress: 0.1, base64: true },
+              );
+              
+              const timestamp = Date.now();
+              const msg = await {
+                msg_id: timestamp,
+                img_id: timestamp,
+                timestamp: timestamp,
+                height: res.height,
+                width: res.width,
+                Schema: 'Image',
+                img: res.base64
+              }
+
+              return msg;
+            });
+
+            const msgList = await Promise.all(pArray)
+            uploadImages(msgList);
+          }
+          
+          this.setState({ uploading: false });
+          navigation.goBack();
+        }
+    });
   }
 
   getSelectedImages(images, current) {
@@ -31,8 +88,8 @@ export default class PhotoPickerScreen extends Component {
       selected: images,
     });
 
-    console.log(current);
-    console.log(this.state.selected);
+    // console.log(current.uri);
+    // console.log(this.state.selected);
   }
 
   render() {

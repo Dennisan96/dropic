@@ -3,7 +3,7 @@ import { ScrollView, View, TouchableOpacity, FlatList, ActivityIndicator } from 
 import { ListItem, SearchBar, CheckBox } from "react-native-elements";
 import { Icon } from 'expo';
 import HeaderButtons, { HeaderButton, Item } from 'react-navigation-header-buttons';
-import { getFriendList, getFriendsInfo } from '../components/api/api';
+import { getFriendList, getFriendsInfo, inviteFriends } from '../components/api/api';
 
 
 const IoniconsHeaderButton = passMeFurther => (
@@ -12,11 +12,12 @@ const IoniconsHeaderButton = passMeFurther => (
 
 export default class InviteFriendsScreen extends Component {
   static navigationOptions = ({ navigation }) => {
+    const {params = {}} = navigation.state;
     return {
       title: 'Invite Friends',
       headerRight: (
         <HeaderButtons HeaderButtonComponent={IoniconsHeaderButton}>
-          <Item title="Done" onPress={() => navigation.goBack()} />
+          <Item title="Done" onPress={params.handleDoneBtn} />
         </HeaderButtons>
       )
     }
@@ -33,6 +34,31 @@ export default class InviteFriendsScreen extends Component {
       checklist: null,
       inviteList: []
     };
+  }
+
+  componentDidMount() {
+    const { navigation } = this.props;
+    navigation.setParams({
+        handleDoneBtn: () => {
+          let addList = this._getAddList();
+          // console.log(navigation.getParam('tripId'));
+          inviteFriends(navigation.getParam('tripId'), addList)
+          .then(() => console.log('ok'));
+          
+          navigation.goBack();
+        }
+    });
+  }
+
+  _getAddList = () => {
+    const { checklist, friendList } = this.state;
+    let list = [];
+    for (let i = 0; i < checklist.length; i++) {
+      if (checklist[i]) {
+        list.push(friendList[i].id);
+      }
+    }
+    return list;
   }
 
   componentWillMount() {
@@ -65,6 +91,7 @@ export default class InviteFriendsScreen extends Component {
   handleCheckBoxPress = (index) => {
     let newChecklist = this.state.checklist;
     newChecklist[index] = !newChecklist[index];
+    // console.log(newChecklist);
     this.setState({ checklist: newChecklist });
   }
 
@@ -85,7 +112,7 @@ export default class InviteFriendsScreen extends Component {
               roundAvatar
               title={`${item.firstName} ${item.lastName}`}
               subtitle={`${item.email}`}
-              leftAvatar={{ title: 'NB' }}
+              leftAvatar={{ title: `${item.firstName}` }}
               containerStyle={{ borderBottomWidth: 0 }}
               checkBox={{
                 size: 20,
