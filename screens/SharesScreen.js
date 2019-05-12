@@ -1,15 +1,17 @@
 import React from 'react';
 import {
+  View,
   Image,
   Platform,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  RefreshControl
+  RefreshControl,
+  FlatList
 } from 'react-native';
 import FA_Icon from '../components/FontAwesomeIcons';
-import { Input, Overlay } from 'react-native-elements';
+import { Input, Overlay, ListItem } from 'react-native-elements';
 
 import { Icon } from 'expo';
 import HeaderButtons, { HeaderButton, Item } from 'react-navigation-header-buttons';
@@ -45,7 +47,7 @@ export default class SharesScreen extends React.Component {
 
   componentWillMount() {
     getTripList('user-uuid-fake-sheldon')
-    .then(res => this.setState({ trips: res }));
+    .then(res => this.setState({ trips: Object.entries(res) }));
   }
 
   componentDidMount() {
@@ -60,25 +62,29 @@ export default class SharesScreen extends React.Component {
     trips: null
   };
 
-  tripList = [
-    {
-      tripId: "trip01",
-      tripName: "NYC Trip",
-      tripPeriod: "Mar 20 - Mar 26 2019",
-      tripBuddies:  ["Zheng Zhi", "An Da", "Chen Pengyu", "Hu Xin"]
-    },
-    {
-      tripId: "trip02",
-      tripName: "SF Trip",
-      tripPeriod: "Jan 20 - Jan 26 2019",
-      tripBuddies:  ["An Da", "Zhang Chi"]
-    }
-  ];
+  // tripList = [
+  //   {
+  //     tripId: "trip01",
+  //     tripName: "NYC Trip",
+  //     tripPeriod: "Mar 20 - Mar 26 2019",
+  //     tripBuddies:  ["Zheng Zhi", "An Da", "Chen Pengyu", "Hu Xin"]
+  //   },
+  //   {
+  //     tripId: "trip02",
+  //     tripName: "SF Trip",
+  //     tripPeriod: "Jan 20 - Jan 26 2019",
+  //     tripBuddies:  ["An Da", "Zhang Chi"]
+  //   }
+  // ];
 
   handleNewTripCreate = () => {
     this.setState({ isVisible: false});
     // create new trip via api
-    createNewTrip(this.state.newTripName);
+    createNewTrip(this.state.newTripName)
+    .then(() => {
+      getTripList('user-uuid-fake-sheldon')
+      .then(res => this.setState({ trips: Object.entries(res) }));
+    });
   }
 
   _onRefresh = () => {
@@ -87,48 +93,61 @@ export default class SharesScreen extends React.Component {
     .then((res) => {
       this.setState({ 
         refreshing: false,
-        trips: res
+        trips: Object.entries(res)
       });
     });
   }
 
+  renderSeparator = () => {
+    return (
+      <View
+        style={{
+          height: 1,
+          width: "86%",
+          backgroundColor: "#CED0CE",
+          marginLeft: "14%"
+        }}
+      />
+    );
+  };
+
   render() {
-    let tripItems = []
-    for (let i = 0; i < this.tripList.length; i++) {
-      const tripInfo = this.tripList[i];
-      let buddiesList = "";
-      for (let j = 0; j < tripInfo.tripBuddies.length; j++) {
-        if (j !== 0) {
-          buddiesList += ", ";
-        }
-        buddiesList += tripInfo.tripBuddies[j];
-      } 
+    // let tripItems = []
+    // for (let i = 0; i < this.tripList.length; i++) {
+    //   const tripInfo = this.tripList[i];
+    //   let buddiesList = "";
+    //   for (let j = 0; j < tripInfo.tripBuddies.length; j++) {
+    //     if (j !== 0) {
+    //       buddiesList += ", ";
+    //     }
+    //     buddiesList += tripInfo.tripBuddies[j];
+    //   } 
 
-      tripItems.push(
-        <TouchableOpacity 
-          key={tripInfo.tripId} 
-          style={styles.itemContainer}
-          onPress={() => this.props.navigation.push(
-            'Trip',
-            {
-              tripName: tripInfo.tripName,
-              tripId: tripInfo.tripId
-            }
-          )}
-        >
-          <Text>
-            {tripInfo.tripName + ": " + tripInfo.tripPeriod}
-          </Text>
-          <Text>
-            {buddiesList}
-          </Text>
-        </TouchableOpacity>
-      );
-    }
-
+    //   tripItems.push(
+    //     <TouchableOpacity 
+    //       key={tripInfo.tripId} 
+    //       style={styles.itemContainer}
+    //       onPress={() => this.props.navigation.push(
+    //         'Trip',
+    //         {
+    //           tripName: tripInfo.tripName,
+    //           tripId: tripInfo.tripId
+    //         }
+    //       )}
+    //     >
+    //       <Text>
+    //         {tripInfo.tripName + ": " + tripInfo.tripPeriod}
+    //       </Text>
+    //       <Text>
+    //         {buddiesList}
+    //       </Text>
+    //     </TouchableOpacity>
+    //   );
+    // }
+    // console.log(this.state.trips);
     return (
       <ScrollView 
-        style={styles.container}
+        containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}
         refreshControl={
           <RefreshControl
             refreshing={this.state.refreshing}
@@ -136,7 +155,33 @@ export default class SharesScreen extends React.Component {
           />
         }
       >
-        {tripItems}
+        <FlatList
+          data={this.state.trips}
+          renderItem={({ item }) => (
+            <ListItem
+              roundAvatar
+              title={item[1]}
+              subtitle={item[1]}
+              leftAvatar={{ title: 'NB' }}
+              containerStyle={{ borderBottomWidth: 0 }}
+              onPress={() => this.props.navigation.push(
+                'Trip',
+                {
+                  tripName: item[1],
+                  tripId: item[1]
+                }
+              )}
+            />
+          )}
+          keyExtractor={item => item[0]}
+          ItemSeparatorComponent={this.renderSeparator}
+          // ListHeaderComponent={this.renderHeader}
+          // ListFooterComponent={this.renderFooter}
+          // onRefresh={this.handleRefresh}
+          // refreshing={this.state.refreshing}
+          // onEndReached={this.handleLoadMore}
+          // onEndReachedThreshold={50}
+        />
         <Overlay 
           isVisible={this.state.isVisible}
           width="auto"

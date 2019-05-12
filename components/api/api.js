@@ -12,14 +12,16 @@ export function createNewTrip(newTripName) {
         'tripName': newTripName
     };
 
-    _asyncPostReq(URL + '/trips/new', bodyParams)
-    .then(() => {
-        const queryURL = URL + `/trips/addMember?memberId=user-uuid-fake-sheldon&tripId=${tripId}`;
-        _asyncGetReq(queryURL)
-        .then()
+    return new Promise((resolve) => {
+        _asyncPostReq(URL + '/trips/new', bodyParams)
+        .then(() => {
+            const queryURL = URL + `/trips/addMember?memberId=user-uuid-fake-sheldon&tripId=${tripId}`;
+            _asyncGetReq(queryURL)
+            .then(() => resolve())
+            .catch((err) => console.log(err));
+        })
         .catch((err) => console.log(err));
-    })
-    .catch((err) => console.log(err));
+    });
 
 
     // heritage, crude but working code, just in case
