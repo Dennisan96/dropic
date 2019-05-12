@@ -4,6 +4,7 @@ import {
   Text,
   View
 } from 'react-native';
+import { Overlay } from 'react-native-elements';
 import { ImageManipulator, Icon } from 'expo';
 
 import CameraRollPicker from 'react-native-camera-roll-picker';
@@ -71,11 +72,12 @@ export default class PhotoPickerScreen extends Component {
             });
 
             const msgList = await Promise.all(pArray)
-            uploadImages(msgList);
+            uploadImages(msgList, 'user-uuid-fake-sheldon', navigation.getParam('tripId'))
+            .then(() => {
+              this.setState({ uploading: false });
+              navigation.goBack();
+            });
           }
-          
-          this.setState({ uploading: false });
-          navigation.goBack();
         }
     });
   }
@@ -108,6 +110,13 @@ export default class PhotoPickerScreen extends Component {
           imagesPerRow={4}
           imageMargin={1}
           callback={this.getSelectedImages} />
+        <Overlay 
+          isVisible={this.state.uploading}
+          width="auto"
+          height="auto"
+        >
+          <Text>Uploading...</Text>
+        </Overlay>
       </View>
     );
   }

@@ -147,13 +147,40 @@ export function getFriendsInfo(friendList) {
     })
 }
 
-export function uploadImages(msgList) {
+export function imgPostDB(resList, userId, tripId) {
+    let photosList = [];
+    resList.forEach((item, idx) => {
+        photosList.push({
+            id: item.img_id,
+            ownerId: userId,
+            photoAddress: {
+              addressBucket: 'anda-bucket-cloudphoto-app',
+              addressKey: item.img_id
+            },
+            tripId: tripId
+        });
+    });
+    const bodyParams = {photos: photosList};
+    // console.log(bodyParams);
+
+    return new Promise((resolve) => {
+        _asyncPostReq(URL + '/photos/newPhotos', bodyParams)
+        .then(res => resolve(res));
+    });
+}
+
+export function uploadImages(msgList, userId, tripId) {
     const bodyParams = {"messages": msgList};
-    _asyncPostReq(imgUploadURL, bodyParams)
-    .then((response) => response.json())
-    .then((responseJson) => {
-        console.log(responseJson);
-    })
+
+    return new Promise((resolve) => {
+        _asyncPostReq(imgUploadURL, bodyParams)
+        .then((response) => response.json())
+        .then((responseJson) => {
+            // console.log(responseJson);
+            imgPostDB(responseJson.messages, userId, tripId)
+            .then(res => resolve(res));
+        })
+    });
 
 
     // const body = {

@@ -6,7 +6,6 @@ import {
 import {
   SharesStack,
   ContactsStack,
-  AddStack,
   PhotoStack,
   SettingsStack,
   ProfileStack
@@ -16,7 +15,6 @@ import {
 const TabNavigator = createBottomTabNavigator({
   SharesStack,
   ContactsStack,
-  AddStack,
   PhotoStack,
   SettingsStack
 });
