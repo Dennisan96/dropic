@@ -162,7 +162,7 @@ export default class SharesScreen extends React.Component {
               roundAvatar
               title={item[1]}
               subtitle={item[1]}
-              leftAvatar={{ title: 'NB' }}
+              leftAvatar={{ title: `${item[1]}` }}
               containerStyle={{ borderBottomWidth: 0 }}
               onPress={() => this.props.navigation.push(
                 'Trip',

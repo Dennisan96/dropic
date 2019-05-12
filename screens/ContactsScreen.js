@@ -3,6 +3,7 @@ import { ScrollView, View, TouchableOpacity, FlatList, ActivityIndicator } from 
 import { ListItem, SearchBar } from "react-native-elements";
 import { Icon } from 'expo';
 import HeaderButtons, { HeaderButton, Item } from 'react-navigation-header-buttons';
+import { getFriendList, getFriendsInfo } from '../components/api/api';
 
 
 const IoniconsHeaderButton = passMeFurther => (
@@ -27,36 +28,20 @@ export default class ContactsScreen extends Component {
     this.state = {
       loading: false,
       data: [],
-      page: 1,
-      seed: 1,
       error: null,
       refreshing: false
     };
   }
 
   componentDidMount() {
-    this.makeRemoteRequest();
+    getFriendList('user-uuid-fake-sheldon')
+    .then((res) => {
+      getFriendsInfo(res)
+      .then((res) => this.setState({ 
+        data: res,
+      }));
+    });
   }
-
-  makeRemoteRequest = () => {
-    const { page, seed } = this.state;
-    const url = `https://randomuser.me/api/?seed=${seed}&page=${page}&results=20`;
-    this.setState({ loading: true });
-
-    fetch(url)
-      .then(res => res.json())
-      .then(res => {
-        this.setState({
-          data: page === 1 ? res.results : [...this.state.data, ...res.results],
-          error: res.error || null,
-          loading: false,
-          refreshing: false
-        });
-      })
-      .catch(error => {
-        this.setState({ error, loading: false });
-      });
-  };
 
   handleRefresh = () => {
     this.setState(
@@ -123,9 +108,9 @@ export default class ContactsScreen extends Component {
           renderItem={({ item }) => (
             <ListItem
               roundAvatar
-              title={`${item.name.first} ${item.name.last}`}
-              subtitle={item.email}
-              leftAvatar={{ source: { uri: item.picture.thumbnail } }}
+              title={`${item.firstName} ${item.lastName}`}
+              subtitle={`${item.email}`}
+              leftAvatar={{ title: `${item.firstName}` }}
               containerStyle={{ borderBottomWidth: 0 }}
             />
           )}

@@ -110,7 +110,9 @@ export function inviteFriends(tripId, addList) {
             })
             .catch((err) => console.log(err));
         });
-        promiseList.push(promise);
+        setTimeout(() => {
+            promiseList.push(promise);
+        }, 1000);
     });
 
     return new Promise((resolve) => {
@@ -216,6 +218,15 @@ export function uploadImages(msgList, userId, tripId) {
     //   });
 }
 
+export function searchUser(email) {
+    return new Promise(resolve => {
+        const eml = email.toLowerCase();
+        const queryURL = URL + `/users/search?email=${eml}`;
+        _asyncGetReq(queryURL)
+        .then((response) => response.json())
+        .then(res => resolve(res));
+    });
+}
 
 function _asyncGetReq(endpoint) {
     return new Promise((resolve, reject) => {
