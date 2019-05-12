@@ -3,6 +3,7 @@ import { ScrollView, View, TouchableOpacity, FlatList, ActivityIndicator } from 
 import { ListItem, SearchBar, CheckBox } from "react-native-elements";
 import { Icon } from 'expo';
 import HeaderButtons, { HeaderButton, Item } from 'react-navigation-header-buttons';
+import { getFriendList, getFriendsInfo } from '../components/api/api';
 
 
 const IoniconsHeaderButton = passMeFurther => (
@@ -26,9 +27,7 @@ export default class InviteFriendsScreen extends Component {
 
     this.state = {
       loading: false,
-      data: [],
-      page: 1,
-      seed: 1,
+      friendList: [],
       error: null,
       refreshing: false,
       checklist: null,
@@ -37,53 +36,14 @@ export default class InviteFriendsScreen extends Component {
   }
 
   componentDidMount() {
-    this.makeRemoteRequest();
+    getFriendList('user-uuid-fake-sheldon')
+    .then((res) => {
+      // console.log(res);
+      this.setState({ friendList: res })
+        getFriendsInfo(res);
+    });
   }
 
-  makeRemoteRequest = () => {
-    const { page, seed } = this.state;
-    const url = `https://randomuser.me/api/?seed=${seed}&page=${page}&results=20`;
-    this.setState({ loading: true });
-
-    fetch(url)
-      .then(res => res.json())
-      .then(res => {
-        this.setState({
-          data: page === 1 ? res.results : [...this.state.data, ...res.results],
-          error: res.error || null,
-          loading: false,
-          refreshing: false,
-          checklist: page === 1 ? Array(res.results.length).fill(false) : [...this.state.checklist, ...Array(res.results.length).fill(false)]
-        });
-      })
-      .catch(error => {
-        this.setState({ error, loading: false });
-      });
-  };
-
-  handleRefresh = () => {
-    this.setState(
-      {
-        page: 1,
-        seed: this.state.seed + 1,
-        refreshing: true
-      },
-      () => {
-        this.makeRemoteRequest();
-      }
-    );
-  };
-
-  handleLoadMore = () => {
-    this.setState(
-      {
-        page: this.state.page + 1
-      },
-      () => {
-        this.makeRemoteRequest();
-      }
-    );
-  };
 
   renderSeparator = () => {
     return (
@@ -95,26 +55,6 @@ export default class InviteFriendsScreen extends Component {
           marginLeft: "14%"
         }}
       />
-    );
-  };
-
-  renderHeader = () => {
-    return <SearchBar placeholder="Type Here..." lightTheme round />;
-  };
-
-  renderFooter = () => {
-    if (!this.state.loading) return null;
-
-    return (
-      <View
-        style={{
-          paddingVertical: 20,
-          borderTopWidth: 1,
-          borderColor: "#CED0CE"
-        }}
-      >
-        <ActivityIndicator animating size="large" />
-      </View>
     );
   };
 
@@ -137,7 +77,7 @@ export default class InviteFriendsScreen extends Component {
               roundAvatar
               title={`${item.name.first} ${item.name.last}`}
               subtitle={`${item.email}`}
-              leftAvatar={{ source: { uri: item.picture.thumbnail } }}
+              leftAvatar={{ title: 'NB' }}
               containerStyle={{ borderBottomWidth: 0 }}
               checkBox={{
                 size: 20,
@@ -148,12 +88,6 @@ export default class InviteFriendsScreen extends Component {
           )}
           keyExtractor={item => item.email}
           ItemSeparatorComponent={this.renderSeparator}
-          ListHeaderComponent={this.renderHeader}
-          ListFooterComponent={this.renderFooter}
-          onRefresh={this.handleRefresh}
-          refreshing={this.state.refreshing}
-          // onEndReached={this.handleLoadMore}
-          onEndReachedThreshold={50}
         />
       </ScrollView>
     );

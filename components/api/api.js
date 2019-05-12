@@ -74,7 +74,7 @@ export function createNewTrip(newTripName) {
 
 export function getTripList(userId) {
     return new Promise((resolve) => {
-        const queryURL = URL + `/users/user-uuid-fake-sheldon`;
+        const queryURL = URL + `/users/${userId}`;
         _asyncGetReq(queryURL)
         .then((response) => response.json())
         .then((response) => {
@@ -83,6 +83,40 @@ export function getTripList(userId) {
         .catch((err) => console.log(err));
     })
 };
+
+export function getFriendList(userId) {
+    return new Promise((resolve) => {
+        const queryURL = URL + `/users/${userId}`;
+        _asyncGetReq(queryURL)
+        .then((response) => response.json())
+        .then((response) => {
+            resolve(response.friends);
+        })
+        .catch((err) => console.log(err));
+    })
+};
+
+export function getFriendsInfo(friendList) {
+    let infoList = [];
+    friendList.forEach((friendId, idx) => {
+        const queryURL = URL + `/users/${friendId}`;
+        let promise = new Promise(resolve => {
+            _asyncGetReq(queryURL)
+            .then((response) => response.json())
+            .then((response) => {
+                const {friends, profilePhotoId, trips, ...partialObject} = response;
+                resolve(partialObject);
+            })
+            .catch((err) => console.log(err));
+        });
+        infoList.push(promise);
+    });
+
+    Promise.all(infoList)
+    .then(values => {
+        console.log(values)
+    }); 
+}
 
 
 function _asyncGetReq(endpoint) {
