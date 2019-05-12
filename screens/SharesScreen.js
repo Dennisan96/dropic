@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  RefreshControl
 } from 'react-native';
 import FA_Icon from '../components/FontAwesomeIcons';
 import { Input, Overlay } from 'react-native-elements';
@@ -14,7 +14,7 @@ import { Input, Overlay } from 'react-native-elements';
 import { Icon } from 'expo';
 import HeaderButtons, { HeaderButton, Item } from 'react-navigation-header-buttons';
 
-import { createNewTrip, GetTripList } from '../components/api/api';
+import { createNewTrip, getTripList } from '../components/api/api';
 
 
 const IoniconsHeaderButton = passMeFurther => (
@@ -44,7 +44,8 @@ export default class SharesScreen extends React.Component {
   };
 
   componentWillMount() {
-    GetTripList('user-uuid-fake-sheldon');
+    getTripList('user-uuid-fake-sheldon')
+    .then(res => this.setState({ trips: res }));
   }
 
   componentDidMount() {
@@ -54,7 +55,9 @@ export default class SharesScreen extends React.Component {
   }
 
   state = {
-    isVisible: false
+    isVisible: false,
+    refreshing: false,
+    trips: null
   };
 
   tripList = [
@@ -76,6 +79,17 @@ export default class SharesScreen extends React.Component {
     this.setState({ isVisible: false});
     // create new trip via api
     createNewTrip(this.state.newTripName);
+  }
+
+  _onRefresh = () => {
+    this.setState({refreshing: true});
+    getTripList('user-uuid-fake-sheldon')
+    .then((res) => {
+      this.setState({ 
+        refreshing: false,
+        trips: res
+      });
+    });
   }
 
   render() {
@@ -113,7 +127,15 @@ export default class SharesScreen extends React.Component {
     }
 
     return (
-      <ScrollView style={styles.container}>
+      <ScrollView 
+        style={styles.container}
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this._onRefresh}
+          />
+        }
+      >
         {tripItems}
         <Overlay 
           isVisible={this.state.isVisible}
