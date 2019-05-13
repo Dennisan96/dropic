@@ -3,7 +3,7 @@ import uuid from 'uuid';
 
 
 const URL = 'http://cloudphoto.us-east-1.elasticbeanstalk.com';
-const imgUploadURL = 'https://8gqr11z8n1.execute-api.us-east-1.amazonaws.com/v01/img';
+const imgUploadURL = 'https://1bapz3fit6.execute-api.us-east-1.amazonaws.com/v01/img';
 
 export function createNewTrip(newTripName) {
     const tripId = uuid.v1();
@@ -97,6 +97,15 @@ export function getFriendList(userId) {
     })
 };
 
+export function inviteFriendsArr(tripId, addList) {
+    const bodyParams = addList
+    
+    return new Promise(resolve => {
+        _asyncPostReq(URL + `/trips/addMember?tripId=${tripId}`, bodyParams)
+        .then(res => resolve(res));
+    });
+}
+
 export function inviteFriends(tripId, addList) {
     let promiseList = [];
     addList.forEach((friendId, idx) => {
@@ -122,7 +131,7 @@ export function inviteFriends(tripId, addList) {
         })
         .catch((err) => console.log(err));
     })
-};
+}
 
 export function getFriendsInfo(friendList) {
     let infoList = [];
@@ -146,6 +155,28 @@ export function getFriendsInfo(friendList) {
             resolve(values);
         })
         .catch((err) => console.log(err));
+    })
+}
+
+export function sendFriendReq(fromUserId, toUserId) {
+    const bodyParams = {
+        fromUserId: fromUserId,
+        status: 'pending',
+        timeStamp: Date.now(),
+        toUserId: toUserId
+    }
+
+    return new Promise(resolve => {
+        _asyncPostReq(URL + '/users/addfriend', bodyParams)
+        .then(res => resolve(res));
+    })
+}
+
+export function getSentFriendReq(fromUserId) {
+    const queryURL = URL + `/users/friendrequestsfrom?userId=${fromUserId}`;
+    return new Promise(resolve => {
+        _asyncGetReq(queryURL)
+        .then(res => resolve(res));
     })
 }
 

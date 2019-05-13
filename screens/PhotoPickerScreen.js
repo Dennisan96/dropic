@@ -54,7 +54,7 @@ export default class PhotoPickerScreen extends Component {
               const res = await ImageManipulator.manipulateAsync(
                 item.uri,
                 [],
-                { compress: 0.1, base64: true },
+                { compress: 0.5, base64: true },
               );
               
               const timestamp = Date.now();

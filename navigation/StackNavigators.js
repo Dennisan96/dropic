@@ -17,7 +17,13 @@ import AddTripScreen from '../screens/AddTripScreen';
 import PhotoPickerScreen from '../screens/PhotoPickerScreen';
 import InviteFriendsScreen from '../screens/InviteFriendsScreen';
 import GalleryScreen from '../screens/GalleryScreen';
-import { SignInScreen } from '../screens/AuthScreen';
+
+// Auth stack screen imports
+
+import WelcomeScreen from '../screens/WelcomeScreen';
+import SignUpScreen from '../screens/SignUpScreen';
+import SignInScreen from '../screens/SignInScreen';
+import CreateProfileScreen from '../screens/CreateProfileScreen';
 
 
 export const SharesStack = createStackNavigator({
@@ -95,6 +101,31 @@ export const ProfileStack = createStackNavigator({
   Profile: ProfileScreen,
 });
 
+// Auth stack
 export const AuthStack = createStackNavigator({
-  Auth: SignInScreen,
-});
+  Welcome: {
+    screen: WelcomeScreen,
+    navigationOptions: () => ({
+      title: `Welcome to this App`, // for the header screen
+      headerBackTitle: 'Back'
+    }),
+  },
+  SignUp: {
+    screen: SignUpScreen,
+    navigationOptions: () => ({
+      title: `Create a new account`,
+    }),
+  },
+  CreateProfile: {
+    screen: CreateProfileScreen,
+    navigationOptions: () => ({
+      title: `Create your user profile`,
+    }),
+  },
+  SignIn: {
+    screen: SignInScreen,
+    navigationOptions: () => ({
+      title: `Log in to your account`,
+    }),
+  }
+})

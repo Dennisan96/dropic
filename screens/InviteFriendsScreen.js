@@ -3,7 +3,7 @@ import { ScrollView, View, TouchableOpacity, FlatList, ActivityIndicator } from 
 import { ListItem, SearchBar, CheckBox } from "react-native-elements";
 import { Icon } from 'expo';
 import HeaderButtons, { HeaderButton, Item } from 'react-navigation-header-buttons';
-import { getFriendList, getFriendsInfo, inviteFriends } from '../components/api/api';
+import { getFriendList, getFriendsInfo, inviteFriendsArr } from '../components/api/api';
 
 
 const IoniconsHeaderButton = passMeFurther => (
@@ -42,10 +42,11 @@ export default class InviteFriendsScreen extends Component {
         handleDoneBtn: () => {
           let addList = this._getAddList();
           // console.log(navigation.getParam('tripId'));
-          inviteFriends(navigation.getParam('tripId'), addList)
-          .then(() => console.log('ok'));
-          
-          navigation.goBack();
+          inviteFriendsArr(navigation.getParam('tripId'), addList)
+          .then((res) => {
+            // console.log(res);
+            navigation.goBack();
+          });
         }
     });
   }
