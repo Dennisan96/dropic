@@ -106,7 +106,7 @@ export const AuthStack = createStackNavigator({
   Welcome: {
     screen: WelcomeScreen,
     navigationOptions: () => ({
-      title: `Welcome to Dropic`, // for the header screen
+      title: `Dropic`, // for the header screen
       headerBackTitle: 'Back'
     }),
   },

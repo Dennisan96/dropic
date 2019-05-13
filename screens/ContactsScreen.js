@@ -117,8 +117,8 @@ export default class ContactsScreen extends Component {
           )}
           keyExtractor={item => item.email}
           ItemSeparatorComponent={this.renderSeparator}
-          ListHeaderComponent={this.renderHeader}
-          ListFooterComponent={this.renderFooter}
+          // ListHeaderComponent={this.renderHeader}
+          // ListFooterComponent={this.renderFooter}
           onRefresh={this.handleRefresh}
           refreshing={this.state.refreshing}
           // onEndReached={this.handleLoadMore}
