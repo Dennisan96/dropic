@@ -32,8 +32,7 @@ export const SharesStack = createStackNavigator({
   Trip: TripScreen,
   Gallery: GalleryScreen,
   PhotoPicker: PhotoPickerScreen,
-  InviteFriends: InviteFriendsScreen,
-  Profile: ProfileScreen
+  InviteFriends: InviteFriendsScreen
 });
 SharesStack.navigationOptions = {
   tabBarLabel: 'Shares',
@@ -98,16 +97,16 @@ SettingsStack.navigationOptions = {
   ),
 };
 
-// export const ProfileStack = createStackNavigator({
-//   Profile: ProfileScreen
-// });
+export const ProfileStack = createStackNavigator({
+  Profile: ProfileScreen
+});
 
 // Auth stack
 export const AuthStack = createStackNavigator({
   Welcome: {
     screen: WelcomeScreen,
     navigationOptions: () => ({
-      title: `Welcome to this App`, // for the header screen
+      title: `Welcome to PhotoShare`, // for the header screen
       headerBackTitle: 'Back'
     }),
   },
@@ -115,12 +114,6 @@ export const AuthStack = createStackNavigator({
     screen: SignUpScreen,
     navigationOptions: () => ({
       title: `Create a new account`,
-    }),
-  },
-  CreateProfile: {
-    screen: CreateProfileScreen,
-    navigationOptions: () => ({
-      title: `Create your user profile`,
     }),
   },
   SignIn: {

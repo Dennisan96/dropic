@@ -11,9 +11,10 @@ export default class ProfileScreen extends React.Component {
       title: 'Profile',
       headerLeft: (
         <Button
-          onPress={() => navigation.toggleDrawer()}
-          title="Menu"
+          onPress={() => navigation.navigate('Shares')}
+          title="Home"
           color="#000"
+          titleStyle={{ fontSize: 5 }}
         />
       )
     }
@@ -22,9 +23,9 @@ export default class ProfileScreen extends React.Component {
   state  = {
     firstName: '',
     lastName: '',
-    email: this.props.navigation.getParam('email'),
-    userId: this.props.navigation.getParam('userId'),
-    nickname: this.props.navigation.getParam('nickname'),
+    email: global.EMAIL,
+    userId: global.USERID,
+    nickname: global.NICKNAME,
     profileUri: null,
     userProfile: null,
     newUser: true,
@@ -34,7 +35,7 @@ export default class ProfileScreen extends React.Component {
   }
 
   componentWillMount = () => {
-    getUserProfile(this.props.navigation.getParam('userId'))
+    getUserProfile(this.state.userId)
     // getUserProfile('user-uuid-fake-sheldon')
     .then(res => {
       // console.log(res);

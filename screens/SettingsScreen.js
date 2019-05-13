@@ -24,6 +24,13 @@ import { Ionicons } from '@expo/vector-icons';
 import Auth from '@aws-amplify/auth'
 
 export default class SettingsScreen extends React.Component {
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: 'Settings'
+    }
+  };
+
+
   state = {
     password1: '',
     password2: '',
@@ -35,21 +42,21 @@ export default class SettingsScreen extends React.Component {
   }
   // Change user password for the app
   changePassword = async () => {
-    const { password1, password2 } = this.state
-    await Auth.currentAuthenticatedUser()
-    .then(user => {
-      return Auth.changePassword(user, password1, password2)
-    })
-    .then(data => console.log('Password changed successfully', data))
-    .catch(err => {
-      if (! err.message) {
-        console.log('Error changing password: ', err)
-        Alert.alert('Error changing password: ', err)
-      } else {
-        console.log('Error changing password: ', err.message)
-        Alert.alert('Error changing password: ', err.message)
-      }
-    })
+    // const { password1, password2 } = this.state
+    // await Auth.currentAuthenticatedUser()
+    // .then(user => {
+    //   return Auth.changePassword(user, password1, password2)
+    // })
+    // .then(data => console.log('Password changed successfully', data))
+    // .catch(err => {
+    //   if (! err.message) {
+    //     console.log('Error changing password: ', err)
+    //     Alert.alert('Error changing password: ', err)
+    //   } else {
+    //     console.log('Error changing password: ', err.message)
+    //     Alert.alert('Error changing password: ', err.message)
+    //   }
+    // })
   }
   // Sign out from the app
   signOutAlert = async () => {
@@ -147,7 +154,7 @@ export default class SettingsScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#5059ae',
+    backgroundColor: '#fff',
     justifyContent: 'center',
     flexDirection: 'column'
   },
@@ -166,19 +173,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 30,
-    backgroundColor: '#5059ae',
+    backgroundColor: '#fff',
   },
   itemStyle: {
     marginTop: 20,
   },
   iconStyle: {
-    color: '#fff',
+    color: 'grey',
     fontSize: 28,
     marginRight: 15
   },
   buttonStyle: {
     alignItems: 'center',
-    backgroundColor: '#b44666',
+    backgroundColor: '#2f95dc',
     padding: 14,
     marginTop: 20,
     borderRadius: 3,

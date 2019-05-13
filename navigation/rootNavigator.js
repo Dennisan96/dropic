@@ -26,10 +26,10 @@ export const DrawerNavigator = createDrawerNavigator({
       drawerLabel: 'Home'
     }
   },
-  About: {
-    screen: SharesStack,
+  Profile: {
+    screen: ProfileStack,
     navigationOptions: {
-      drawerLabel: 'About'
+      drawerLabel: 'Profile'
     }
-  },
+  }
 });

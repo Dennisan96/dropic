@@ -20,11 +20,11 @@ export default class WelcomeScreen extends React.Component {
         {/* App Logo */}
         <Image 
           source={logo}
-          style={{ width: 110.46, height: 117 }}
+          style={{ width: 120, height: 120 }}
         />
         <TouchableOpacity 
           onPress={() => this.handleRoute('SignIn')}
-          style={styles.buttonStyle}>
+          style={styles.button1Style}>
           <Text style={styles.textStyle}>Sign In</Text>
         </TouchableOpacity>
         <TouchableOpacity 
@@ -45,17 +45,32 @@ export default class WelcomeScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#b44666', // #b13366
+    backgroundColor: 'white', // #b13366
     alignItems: 'center',
     justifyContent: 'center',
   },
+  button1Style: {
+    alignItems: 'center',
+    backgroundColor: '#2f95dc',
+    width: 280,
+    height: 50,
+    // padding: 14,
+    marginTop: 100,
+    borderRadius: 3,
+  },
   buttonStyle: {
-    padding: 20,
+    alignItems: 'center',
+    backgroundColor: '#2f95dc',
+    width: 280,
+    height: 50,
+    // padding: 14,
+    marginTop: 20,
+    borderRadius: 3,
   },
   textStyle: {
     fontWeight: 'bold',
     fontSize: 18,
     padding: 10,
-    color: '#fff'
+    color: 'white'
   }
 })
