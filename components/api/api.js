@@ -212,10 +212,34 @@ export function sendFriendReq(fromUserId, toUserId) {
     })
 }
 
+export function acceptFriendReq(fromUserId, toUserId) {
+    const bodyParams = {
+        fromUserId: fromUserId,
+        status: 'accepted',
+        timeStamp: Date.now(),
+        toUserId: toUserId
+    }
+
+    return new Promise(resolve => {
+        _asyncPutReq(URL + '/users/addfriend', bodyParams)
+        .then(res => resolve(res));
+    })
+}
+
 export function getSentFriendReq(fromUserId) {
-    const queryURL = URL + `/users/friendrequestsfrom?userId=${fromUserId}`;
+    const queryURL = URL + `/users/friendrequestsfrom/${fromUserId}`;
     return new Promise(resolve => {
         _asyncGetReq(queryURL)
+        .then((response) => response.json())
+        .then(res => resolve(res));
+    })
+}
+
+export function getRecvFriendReq(toUserId) {
+    const queryURL = URL + `/users/friendrequeststo/${toUserId}`;
+    return new Promise(resolve => {
+        _asyncGetReq(queryURL)
+        .then((response) => response.json())
         .then(res => resolve(res));
     })
 }
@@ -321,6 +345,7 @@ function _asyncGetReq(endpoint) {
     });
 };
 
+
 function _asyncPostReq(endpoint, bodyParams) {
     return new Promise((resolve, reject) => {
         fetch(endpoint, {
@@ -340,6 +365,29 @@ function _asyncPostReq(endpoint, bodyParams) {
         })
         .catch((error) => {
             reject('promise rej as post req error: ' + error);
+        });
+    });
+};
+
+function _asyncPutReq(endpoint, bodyParams) {
+    return new Promise((resolve, reject) => {
+        fetch(endpoint, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(bodyParams)
+        })
+        .then((response) => {
+              if (response.ok) {
+                  resolve(response);
+              } else {
+                  reject('promise rej as put req not ok');
+              }
+        })
+        .catch((error) => {
+            reject('promise rej as put req error: ' + error);
         });
     });
 };

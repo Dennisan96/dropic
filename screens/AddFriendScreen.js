@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { ScrollView, View, TouchableOpacity, FlatList, RefreshControl, } from "react-native";
 import { ListItem, SearchBar, Button, Divider } from "react-native-elements";
 import FA_Icon from '../components/FontAwesomeIcons';
-import { searchUser, sendFriendReq, getSentFriendReq } from '../components/api/api';
+import { searchUser, sendFriendReq, getSentFriendReq, getFriendsInfo, getRecvFriendReq, acceptFriendReq } from '../components/api/api';
 
 
 export default class AddFriendScreen extends Component {
@@ -32,24 +32,52 @@ export default class AddFriendScreen extends Component {
   }
 
   handleBtnPress = (toUserId) => {
-    sendFriendReq('user-uuid-fake-sheldon', toUserId)
+    sendFriendReq(global.USERID, toUserId)
     .then(res => console.log(res));
+  }
+
+  handleAcceptReq = (fromUserId) => {
+    // console.log(fromUserId);
+
+    acceptFriendReq(fromUserId, global.USERID)
+    .then(res => console.log(res));
+
   }
 
   _onRefresh = () => {
     this.setState({refreshing: true});
-    // this.setState({
-    //   sentReq: [{firstName: 'first', lastName: 'last', email: 'email@email.com', id: 'user-uuid'}],
-    //   recvReq: [{firstName: 'first', lastName: 'last', email: 'email@email.com', id: 'user-uuid'}],
-    //   refreshing: false
-    // });
     
-    this.setState({refreshing: true});
-    getSentFriendReq('user-uuid-fake-sheldon')
+    getSentFriendReq(global.USERID)
     .then((res) => {
-      console.log(res);
+      // console.log(res);
+      const toList = res.map(item => item.toUserId);
       this.setState({ 
         refreshing: false
+      });
+
+      getFriendsInfo(toList)
+      .then((res) => {
+        // console.log(res);
+        this.setState({ 
+          sentReq: res,
+        }
+      )})
+
+      getRecvFriendReq(global.USERID)
+      .then((res) => {
+        // console.log(res);
+        const fromList = res.map(item => item.fromUserId);
+        this.setState({ 
+          refreshing: false
+        });
+  
+        getFriendsInfo(fromList)
+        .then((res) => {
+          // console.log(res);
+          this.setState({ 
+            recvReq: res,
+          }
+        )})
       });
     });
   }
@@ -125,6 +153,7 @@ export default class AddFriendScreen extends Component {
                   title="Accept Request"
                   type="outline"
                   titleStyle={{ fontSize: 12 }}
+                  onPress={() => this.handleAcceptReq(item.id)}
                 />
               }
             />
