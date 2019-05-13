@@ -99,7 +99,7 @@ export function listTripPhotoes(userId, tripId) {
     })
 };
 
-export function getUserList(userId) {
+export function listUserPhotoes(userId) {
     return new Promise((resolve) => {
         const queryURL = URL + `/photos/finduserphotos?userId=${userId}`;
         _asyncGetReq(queryURL)

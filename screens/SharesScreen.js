@@ -11,7 +11,7 @@ import {
   FlatList
 } from 'react-native';
 import FA_Icon from '../components/FontAwesomeIcons';
-import { Input, Overlay, ListItem } from 'react-native-elements';
+import { Input, Overlay, ListItem, Avatar } from 'react-native-elements';
 
 import { Icon } from 'expo';
 import HeaderButtons, { HeaderButton, Item } from 'react-navigation-header-buttons';
@@ -32,13 +32,17 @@ export default class SharesScreen extends React.Component {
       headerBackTitle: ' ',
       headerLeft: (
         <TouchableOpacity
-          onPress={() => navigation.navigate('Profile', {
-            userId: navigation.getParam('userId'),
-            email: navigation.getParam('email'),
-            nickname: navigation.getParam('nickname')
-          })}
+          style={{marginLeft: 10}}
+          onPress={() => navigation.navigate('Profile')}
         >
-          <FA_Icon name={'user-secret'} />
+          <Avatar
+            rounded
+            title={navigation.getParam('nickname')}
+            // source={{
+            //   uri:
+            //     'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
+            // }}
+          />
         </TouchableOpacity>
       ),
       headerRight: (

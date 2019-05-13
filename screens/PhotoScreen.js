@@ -9,7 +9,7 @@ import { listUserPhotoes } from '../components/api/api';
 export default class TripScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      title: navigation.getParam('My Photos'),
+      title: 'My Photoes',
     }
   };
 
@@ -70,7 +70,7 @@ export default class TripScreen extends React.Component {
               onPress={() => navigation.push(
                 'Gallery',
                 {
-                  tripName: navigation.getParam('tripName'),
+                  tripName: 'My Photoes',
                   imageUrls: images.map(image => ({'url': image.source.uri})),
                   index: index
                 }
