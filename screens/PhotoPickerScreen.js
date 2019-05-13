@@ -46,8 +46,8 @@ export default class PhotoPickerScreen extends Component {
     const { navigation } = this.props;
     navigation.setParams({
         handleDoneBtn: async () => {
-
-          if (this.state.selected) {
+          // console.log(this.state.selected);
+          if (this.state.selected.length !== 0) {
             this.setState({ uploading: true });
 
             const pArray = this.state.selected.map(async item => {
@@ -78,6 +78,7 @@ export default class PhotoPickerScreen extends Component {
               navigation.goBack();
             });
           }
+          navigation.goBack();
         }
     });
   }
