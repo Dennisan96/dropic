@@ -79,7 +79,7 @@ export function getTripList(userId) {
         _asyncGetReq(queryURL)
         .then((response) => response.json())
         .then((response) => {
-            resolve(response.trips);
+            resolve(response);
         })
         .catch((err) => console.log(err));
     })

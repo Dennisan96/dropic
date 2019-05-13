@@ -26,7 +26,7 @@ export default class TripScreen extends React.Component {
     listUserPhotoes(global.USERID)
     .then(res => {
       const images = []
-      console.log(res);
+      // console.log(res);
       if (res) {
         res.forEach(item => {
           const bucket = item.addressBucket;

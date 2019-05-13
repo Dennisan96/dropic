@@ -35,14 +35,19 @@ export default class SharesScreen extends React.Component {
           style={{marginLeft: 10}}
           onPress={() => navigation.navigate('Profile')}
         >
-          <Avatar
+          {navigation.getParam('userProfileUri') ? 
+            <Avatar
+              rounded
+              title={navigation.getParam('nickname')}
+              source={{uri: navigation.getParam('userProfileUri')}}
+            />
+            :
+            <Avatar
             rounded
             title={navigation.getParam('nickname')}
-            // source={{
-            //   uri:
-            //     'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-            // }}
           />
+        }
+
         </TouchableOpacity>
       ),
       headerRight: (
@@ -58,13 +63,18 @@ export default class SharesScreen extends React.Component {
     getTripList(this.props.navigation.getParam('userId'))
     .then(res => {
       // console.log(res);
-      this.setState({ trips: Object.entries(res) });
+      this.props.navigation.setParams({
+        userProfileUri: `https://s3.amazonaws.com/${res.profilePhotoAddress.addressBucket}/${res.profilePhotoAddress.addressKey}`
+      });
+      this.setState({ 
+        trips: Object.entries(res.trips)
+      });
     });
   }
 
   componentDidMount() {
     this.props.navigation.setParams({
-        handleAddTripBtn: () => this.setState({ isVisible: true })
+        handleAddTripBtn: () => this.setState({ isVisible: true }),
     });
   }
 
@@ -82,7 +92,7 @@ export default class SharesScreen extends React.Component {
     .then(() => {
       getTripList(this.props.navigation.getParam('userId'))
       .then(res => {
-        this.setState({ trips: Object.entries(res) });
+        this.setState({ trips: Object.entries(res.trips) });
       });
     });
   }
@@ -93,7 +103,7 @@ export default class SharesScreen extends React.Component {
     .then((res) => {
       this.setState({ 
         refreshing: false,
-        trips: Object.entries(res)
+        trips: Object.entries(res.trips)
       });
     });
   }
@@ -161,7 +171,7 @@ export default class SharesScreen extends React.Component {
             <ListItem
               roundAvatar
               title={item[1]}
-              subtitle={item[1]}
+              // subtitle={item[1]}
               leftAvatar={{ title: `${item[1]}` }}
               containerStyle={{ borderBottomWidth: 0 }}
               onPress={() => this.props.navigation.push(
