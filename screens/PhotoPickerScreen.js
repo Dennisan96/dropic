@@ -72,7 +72,7 @@ export default class PhotoPickerScreen extends Component {
             });
 
             const msgList = await Promise.all(pArray)
-            uploadImages(msgList, 'user-uuid-fake-sheldon', navigation.getParam('tripId'))
+            uploadImages(msgList, navigation.getParam('userId'), navigation.getParam('tripId'))
             .then(() => {
               this.setState({ uploading: false });
               navigation.goBack();

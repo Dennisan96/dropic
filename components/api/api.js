@@ -5,18 +5,18 @@ import uuid from 'uuid';
 const URL = 'http://cloudphoto.us-east-1.elasticbeanstalk.com';
 const imgUploadURL = 'https://1bapz3fit6.execute-api.us-east-1.amazonaws.com/v01/img';
 
-export function createNewTrip(newTripName) {
+export function createNewTrip(newTripName, userId) {
     const tripId = uuid.v1();
     let bodyParams = {
         'id': tripId,
-        'tripMember': ['user-uuid-fake-sheldon'],
+        'tripMember': [userId],
         'tripName': newTripName
     };
 
     return new Promise((resolve) => {
         _asyncPostReq(URL + '/trips/new', bodyParams)
         .then(() => {
-            const queryURL = URL + `/trips/addMember?memberId=user-uuid-fake-sheldon&tripId=${tripId}`;
+            const queryURL = URL + `/trips/addMember?memberId=${userId}&tripId=${tripId}`;
             _asyncGetReq(queryURL)
             .then(() => resolve())
             .catch((err) => console.log(err));
@@ -80,6 +80,20 @@ export function getTripList(userId) {
         .then((response) => response.json())
         .then((response) => {
             resolve(response.trips);
+        })
+        .catch((err) => console.log(err));
+    })
+};
+
+export function listTripPhotoes(userId, tripId) {
+    return new Promise((resolve) => {
+        const queryURL = URL + `/photos/findAll?userId=${userId}&tripId=${tripId}`;
+        console.log(queryURL);
+        _asyncGetReq(queryURL)
+        .then((response) => response.json())
+        .then((response) => {
+            console.log(response);
+            resolve(response);
         })
         .catch((err) => console.log(err));
     })

@@ -50,8 +50,12 @@ export default class SharesScreen extends React.Component {
   };
 
   componentWillMount() {
-    getTripList('user-uuid-fake-sheldon')
-    .then(res => this.setState({ trips: Object.entries(res) }));
+    // console.log(this.props.navigation.getParam('userId'));
+    getTripList(this.props.navigation.getParam('userId'))
+    .then(res => {
+      // console.log(res);
+      this.setState({ trips: Object.entries(res) });
+    });
   }
 
   componentDidMount() {
@@ -70,16 +74,18 @@ export default class SharesScreen extends React.Component {
   handleNewTripCreate = () => {
     this.setState({ isVisible: false});
     // create new trip via api
-    createNewTrip(this.state.newTripName)
+    createNewTrip(this.state.newTripName, this.props.navigation.getParam('userId'))
     .then(() => {
-      getTripList('user-uuid-fake-sheldon')
-      .then(res => this.setState({ trips: Object.entries(res) }));
+      getTripList(this.props.navigation.getParam('userId'))
+      .then(res => {
+        this.setState({ trips: Object.entries(res) });
+      });
     });
   }
 
   _onRefresh = () => {
     this.setState({refreshing: true});
-    getTripList('user-uuid-fake-sheldon')
+    getTripList(this.props.navigation.getParam('userId'))
     .then((res) => {
       this.setState({ 
         refreshing: false,
@@ -158,7 +164,8 @@ export default class SharesScreen extends React.Component {
                 'Trip',
                 {
                   tripName: item[1],
-                  tripId: item[0]
+                  tripId: item[0],
+                  userId: this.props.navigation.getParam('userId')
                 }
               )}
             />
