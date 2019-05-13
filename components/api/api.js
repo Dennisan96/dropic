@@ -92,7 +92,7 @@ export function listTripPhotoes(userId, tripId) {
         _asyncGetReq(queryURL)
         .then((response) => response.json())
         .then((response) => {
-            console.log(response);
+            // console.log(response);
             resolve(response);
         })
         .catch((err) => console.log(err));
@@ -105,6 +105,7 @@ export function getFriendList(userId) {
         _asyncGetReq(queryURL)
         .then((response) => response.json())
         .then((response) => {
+            // console.log(response);
             resolve(response.friends);
         })
         .catch((err) => console.log(err));

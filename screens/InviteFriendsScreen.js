@@ -63,7 +63,7 @@ export default class InviteFriendsScreen extends Component {
   }
 
   componentWillMount() {
-    getFriendList('user-uuid-fake-sheldon')
+    getFriendList(this.props.navigation.getParam('userId'))
     .then((res) => {
         getFriendsInfo(res)
         .then((res) => this.setState({ 

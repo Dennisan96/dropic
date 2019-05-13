@@ -12,6 +12,7 @@ Amplify.configure(awsmobile);
 // Amplify.configure(config)
 
 
+
 class App extends React.Component {
   state = {
     isLoadingComplete: false,

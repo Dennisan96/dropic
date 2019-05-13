@@ -29,6 +29,12 @@ export default class AuthLoadingScreen extends React.Component {
         nickname: user.attributes.nickname
       }
       // console.log(userInfo);
+
+      // CAUTION!! DO NOT ABUSE
+      global.USERID = user.username;
+      global.EMAIL = user.attributes.email;
+      global.NICKNAME =  user.attributes.nickname;
+
       this.props.navigation.navigate('Shares', userInfo)
     })
     .catch(err => console.log(err))

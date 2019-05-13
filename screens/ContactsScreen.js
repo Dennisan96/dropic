@@ -33,13 +33,18 @@ export default class ContactsScreen extends Component {
     };
   }
 
-  componentDidMount() {
-    getFriendList('user-uuid-fake-sheldon')
+  componentWillMount() {
+
+    getFriendList(global.USERID)
     .then((res) => {
       getFriendsInfo(res)
-      .then((res) => this.setState({ 
-        data: res,
-      }));
+      .then((res) => {
+        // console.log(res);
+        this.setState({ 
+          data: res,
+        }
+      )})
+      .catch(err => console.log(err));
     });
   }
 

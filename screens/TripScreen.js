@@ -63,7 +63,7 @@ export default class TripScreen extends React.Component {
           images.push({source: {uri: `https://s3.amazonaws.com/${bucket}/${key}`}})
         })
       }
-      console.log(images);
+      // console.log(images);
       this.setState({ images: images, refreshing: false })
     });
   }
