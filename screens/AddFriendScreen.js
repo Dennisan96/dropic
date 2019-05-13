@@ -34,7 +34,8 @@ export default class AddFriendScreen extends Component {
   handleBtnPress = (toUserId) => {
     sendFriendReq(global.USERID, toUserId)
     .then(res => {
-      console.log(res);
+      // console.log(res);
+      this.setState({searchRes: []});
       this._onRefresh();
     });
   }
@@ -44,7 +45,7 @@ export default class AddFriendScreen extends Component {
 
     acceptFriendReq(fromUserId, global.USERID)
     .then(res => {
-      console.log(res);
+      // console.log(res);
       this._onRefresh();
     });
 
@@ -63,7 +64,7 @@ export default class AddFriendScreen extends Component {
 
       getFriendsInfo(toList)
       .then((res) => {
-        // console.log(res);
+        console.log(res);
         this.setState({ 
           sentReq: res,
         }
@@ -79,7 +80,7 @@ export default class AddFriendScreen extends Component {
   
         getFriendsInfo(fromList)
         .then((res) => {
-          // console.log(res);
+          console.log(res);
           this.setState({ 
             recvReq: res,
           }
@@ -160,7 +161,10 @@ export default class AddFriendScreen extends Component {
                 roundAvatar
                 title={`${item.firstName} ${item.lastName}`}
                 subtitle={`${item.email}`}
-                leftAvatar={{ title: `${item.firstName}` }}
+                leftAvatar={{ 
+                  title: item.firstName,
+                  source: {uri: `https://s3.amazonaws.com/${item.profilePhotoAddress.addressBucket}/${item.profilePhotoAddress.addressKey}`}
+                }}
                 containerStyle={{ borderBottomWidth: 0 }}
                 rightElement = {
                   <Button
@@ -187,7 +191,10 @@ export default class AddFriendScreen extends Component {
                 roundAvatar
                 title={`${item.firstName} ${item.lastName}`}
                 subtitle={`${item.email}`}
-                leftAvatar={{ title: `${item.firstName}` }}
+                leftAvatar={{ 
+                  title: item.firstName,
+                  source: {uri: `https://s3.amazonaws.com/${item.profilePhotoAddress.addressBucket}/${item.profilePhotoAddress.addressKey}`}
+                }}
                 containerStyle={{ borderBottomWidth: 0 }}
                 rightElement = {
                   <Button
