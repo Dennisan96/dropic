@@ -99,6 +99,18 @@ export function listTripPhotoes(userId, tripId) {
     })
 };
 
+export function getUserList(userId) {
+    return new Promise((resolve) => {
+        const queryURL = URL + `/photos/finduserphotos?userId=${userId}`;
+        _asyncGetReq(queryURL)
+        .then((response) => response.json())
+        .then((response) => {
+            resolve(response);
+        })
+        .catch((err) => console.log(err));
+    })
+};
+
 export function getFriendList(userId) {
     return new Promise((resolve) => {
         const queryURL = URL + `/users/${userId}`;
@@ -205,6 +217,7 @@ export function sendFriendReq(fromUserId, toUserId) {
         timeStamp: Date.now(),
         toUserId: toUserId
     }
+    console.log(bodyParams);
 
     return new Promise(resolve => {
         _asyncPostReq(URL + '/users/addfriend', bodyParams)

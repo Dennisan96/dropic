@@ -14,10 +14,10 @@ export default class AddFriendScreen extends Component {
 
   state = {
     searchValue: '',
-    searchRes: [{firstName: 'first', lastName: 'last', email: 'email@email.com', id: 'user-uuid'}],
+    searchRes: [],
     pulling: 'false',
-    sentReq: '',
-    recvReq: '',
+    sentReq: [],
+    recvReq: [],
   };
 
   handleInputChange = (searchValue) => {
@@ -33,14 +33,20 @@ export default class AddFriendScreen extends Component {
 
   handleBtnPress = (toUserId) => {
     sendFriendReq(global.USERID, toUserId)
-    .then(res => console.log(res));
+    .then(res => {
+      console.log(res);
+      this._onRefresh();
+    });
   }
 
   handleAcceptReq = (fromUserId) => {
     // console.log(fromUserId);
 
     acceptFriendReq(fromUserId, global.USERID)
-    .then(res => console.log(res));
+    .then(res => {
+      console.log(res);
+      this._onRefresh();
+    });
 
   }
 
@@ -49,7 +55,7 @@ export default class AddFriendScreen extends Component {
     
     getSentFriendReq(global.USERID)
     .then((res) => {
-      // console.log(res);
+      console.log(res);
       const toList = res.map(item => item.toUserId);
       this.setState({ 
         refreshing: false
@@ -96,7 +102,7 @@ export default class AddFriendScreen extends Component {
   };
 
   render() {
-    const { searchValue, searchRes } = this.state;
+    const { searchValue, searchRes, sentReq, recvReq } = this.state;
 
     return (
       <ScrollView
@@ -116,74 +122,89 @@ export default class AddFriendScreen extends Component {
           value={searchValue}
           onSubmitEditing={this.handleSearchEnter}
         />
-        <FlatList
-          data={this.state.searchRes}
-          renderItem={({ item }) => (
-            <ListItem
-              roundAvatar
-              title={`${item.firstName} ${item.lastName}`}
-              subtitle={`${item.email}`}
-              leftAvatar={{ title: `${item.firstName}` }}
-              containerStyle={{ borderBottomWidth: 0 }}
-              rightElement = {
-                <Button
-                  title="Add Friend"
-                  type="outline"
-                  titleStyle={{ fontSize: 12 }}
-                  onPress={() => this.handleBtnPress(item.id)}
-                />
-              }
-            />
-          )}
-          keyExtractor={item => item.email}
-          ItemSeparatorComponent={this.renderSeparator}
-        />
+        {searchRes ?
+          <FlatList
+            data={searchRes}
+            renderItem={({ item }) => (
+              <ListItem
+                roundAvatar
+                title={`${item.firstName} ${item.lastName}`}
+                subtitle={`${item.email}`}
+                leftAvatar={{ 
+                  title: item.firstName,
+                  source: {uri: `https://s3.amazonaws.com/${item.profilePhotoAddress.addressBucket}/${item.profilePhotoAddress.addressKey}`} 
+                }}
+                containerStyle={{ borderBottomWidth: 0 }}
+                rightElement = {
+                  <Button
+                    title="Add Friend"
+                    type="outline"
+                    titleStyle={{ fontSize: 12 }}
+                    onPress={() => this.handleBtnPress(item.id)}
+                  />
+                }
+              />
+            )}
+            keyExtractor={item => item.email}
+            ItemSeparatorComponent={this.renderSeparator}
+          />
+          :
+          {}
+        }
         <Divider style={{ backgroundColor: '#2f95dc' }} />
-        <FlatList
-          data={this.state.recvReq}
-          renderItem={({ item }) => (
-            <ListItem
-              roundAvatar
-              title={`${item.firstName} ${item.lastName}`}
-              subtitle={`${item.email}`}
-              leftAvatar={{ title: `${item.firstName}` }}
-              containerStyle={{ borderBottomWidth: 0 }}
-              rightElement = {
-                <Button
-                  title="Accept Request"
-                  type="outline"
-                  titleStyle={{ fontSize: 12 }}
-                  onPress={() => this.handleAcceptReq(item.id)}
-                />
-              }
-            />
-          )}
-          keyExtractor={item => item.email}
-          ItemSeparatorComponent={this.renderSeparator}
-        />
+        {recvReq ? 
+          <FlatList
+            data={recvReq}
+            renderItem={({ item }) => (
+              <ListItem
+                roundAvatar
+                title={`${item.firstName} ${item.lastName}`}
+                subtitle={`${item.email}`}
+                leftAvatar={{ title: `${item.firstName}` }}
+                containerStyle={{ borderBottomWidth: 0 }}
+                rightElement = {
+                  <Button
+                    title="Accept Request"
+                    type="outline"
+                    titleStyle={{ fontSize: 12 }}
+                    onPress={() => this.handleAcceptReq(item.id)}
+                  />
+                }
+              />
+            )}
+            keyExtractor={item => item.email}
+            ItemSeparatorComponent={this.renderSeparator}
+          />
+          :
+          {}
+        }
         <Divider style={{ backgroundColor: '#2f95dc' }} />
-        <FlatList
-          data={this.state.sentReq}
-          renderItem={({ item }) => (
-            <ListItem
-              roundAvatar
-              title={`${item.firstName} ${item.lastName}`}
-              subtitle={`${item.email}`}
-              leftAvatar={{ title: `${item.firstName}` }}
-              containerStyle={{ borderBottomWidth: 0 }}
-              rightElement = {
-                <Button
-                  title="Request Sent"
-                  type="outline"
-                  titleStyle={{ fontSize: 12 }}
-                  disabled
-                />
-              }
-            />
-          )}
-          keyExtractor={item => item.email}
-          ItemSeparatorComponent={this.renderSeparator}
-        />
+        {sentReq ?
+          <FlatList
+            data={sentReq}
+            renderItem={({ item }) => (
+              <ListItem
+                roundAvatar
+                title={`${item.firstName} ${item.lastName}`}
+                subtitle={`${item.email}`}
+                leftAvatar={{ title: `${item.firstName}` }}
+                containerStyle={{ borderBottomWidth: 0 }}
+                rightElement = {
+                  <Button
+                    title="Request Sent"
+                    type="outline"
+                    titleStyle={{ fontSize: 12 }}
+                    disabled
+                  />
+                }
+              />
+            )}
+            keyExtractor={item => item.email}
+            ItemSeparatorComponent={this.renderSeparator}
+          />
+          :
+          {}
+        }
       </ScrollView>
     );
   }

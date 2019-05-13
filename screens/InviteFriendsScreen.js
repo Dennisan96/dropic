@@ -111,7 +111,10 @@ export default class InviteFriendsScreen extends Component {
               roundAvatar
               title={`${item.firstName} ${item.lastName}`}
               subtitle={`${item.email}`}
-              leftAvatar={{ title: `${item.firstName}` }}
+              leftAvatar={{ 
+                title: item.firstName,
+                source: {uri: `https://s3.amazonaws.com/${item.profilePhotoAddress.addressBucket}/${item.profilePhotoAddress.addressKey}`} 
+              }}
               containerStyle={{ borderBottomWidth: 0 }}
               checkBox={{
                 size: 20,
