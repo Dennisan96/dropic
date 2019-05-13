@@ -88,7 +88,7 @@ export function getTripList(userId) {
 export function listTripPhotoes(userId, tripId) {
     return new Promise((resolve) => {
         const queryURL = URL + `/photos/findAll?userId=${userId}&tripId=${tripId}`;
-        console.log(queryURL);
+        // console.log(queryURL);
         _asyncGetReq(queryURL)
         .then((response) => response.json())
         .then((response) => {

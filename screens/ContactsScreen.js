@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { ScrollView, View, TouchableOpacity, FlatList, ActivityIndicator } from "react-native";
+import { ScrollView, View, TouchableOpacity, FlatList, ActivityIndicator, RefreshControl } from "react-native";
 import { ListItem, SearchBar } from "react-native-elements";
 import { Icon } from 'expo';
 import HeaderButtons, { HeaderButton, Item } from 'react-navigation-header-buttons';
@@ -34,7 +34,10 @@ export default class ContactsScreen extends Component {
   }
 
   componentWillMount() {
+    this.callGetFriendList();
+  }
 
+  callGetFriendList = () => {
     getFriendList(global.USERID)
     .then((res) => {
       getFriendsInfo(res)
@@ -42,35 +45,17 @@ export default class ContactsScreen extends Component {
         // console.log(res);
         this.setState({ 
           data: res,
+          refreshing: false
         }
       )})
       .catch(err => console.log(err));
     });
   }
 
-  handleRefresh = () => {
-    this.setState(
-      {
-        page: 1,
-        seed: this.state.seed + 1,
-        refreshing: true
-      },
-      () => {
-        this.makeRemoteRequest();
-      }
-    );
-  };
-
-  handleLoadMore = () => {
-    this.setState(
-      {
-        page: this.state.page + 1
-      },
-      () => {
-        this.makeRemoteRequest();
-      }
-    );
-  };
+  _onRefresh = () => {
+    this.setState({refreshing: true});
+    this.callGetFriendList();
+  }
 
   renderSeparator = () => {
     return (
@@ -107,7 +92,15 @@ export default class ContactsScreen extends Component {
 
   render() {
     return (
-      <ScrollView containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}>
+      <ScrollView 
+        containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this._onRefresh}
+          />
+        }
+      >
         <FlatList
           data={this.state.data}
           renderItem={({ item }) => (
