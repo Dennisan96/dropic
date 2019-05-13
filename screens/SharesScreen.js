@@ -32,7 +32,11 @@ export default class SharesScreen extends React.Component {
       headerBackTitle: ' ',
       headerLeft: (
         <TouchableOpacity
-          onPress={() => navigation.toggleDrawer()}
+          onPress={() => navigation.navigate('Profile', {
+            userId: navigation.getParam('userId'),
+            email: navigation.getParam('email'),
+            nickname: navigation.getParam('nickname')
+          })}
         >
           <FA_Icon name={'user-secret'} />
         </TouchableOpacity>
@@ -59,23 +63,9 @@ export default class SharesScreen extends React.Component {
   state = {
     isVisible: false,
     refreshing: false,
-    trips: null
+    trips: null,
+    userId: this.props.navigation.getParam('userId'),
   };
-
-  // tripList = [
-  //   {
-  //     tripId: "trip01",
-  //     tripName: "NYC Trip",
-  //     tripPeriod: "Mar 20 - Mar 26 2019",
-  //     tripBuddies:  ["Zheng Zhi", "An Da", "Chen Pengyu", "Hu Xin"]
-  //   },
-  //   {
-  //     tripId: "trip02",
-  //     tripName: "SF Trip",
-  //     tripPeriod: "Jan 20 - Jan 26 2019",
-  //     tripBuddies:  ["An Da", "Zhang Chi"]
-  //   }
-  // ];
 
   handleNewTripCreate = () => {
     this.setState({ isVisible: false});

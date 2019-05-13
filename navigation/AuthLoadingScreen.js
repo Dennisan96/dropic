@@ -22,10 +22,13 @@ export default class AuthLoadingScreen extends React.Component {
     await Auth.currentAuthenticatedUser()
     .then(user => {
       this.setState({userToken: user.signInUserSession.accessToken.jwtToken})
+
       const userInfo = {
         userId: user.username,
-        email: user.email
+        email: user.attributes.email,
+        nickname: user.attributes.nickname
       }
+      // console.log(userInfo);
       this.props.navigation.navigate('Shares', userInfo)
     })
     .catch(err => console.log(err))

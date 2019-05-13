@@ -26,12 +26,6 @@ export const DrawerNavigator = createDrawerNavigator({
       drawerLabel: 'Home'
     }
   },
-  Profile: {
-    screen: ProfileStack,
-    navigationOptions: {
-      drawerLabel: 'Profile'
-    }
-  },
   About: {
     screen: SharesStack,
     navigationOptions: {

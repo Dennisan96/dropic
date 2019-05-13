@@ -133,6 +133,31 @@ export function inviteFriends(tripId, addList) {
     })
 }
 
+export function getUserProfile(userId) {
+    return new Promise(resolve => {
+        _asyncGetReq(URL + `/users/${userId}`)
+        .then((response) => response.json())
+        .then((res) => resolve(res))
+    });
+}
+
+export function uploadProfilePhoto(msgList) {
+    const bodyParams = msgList;
+    // console.log(bodyParams);
+    return new Promise((resolve) => {
+        _asyncPostReq(imgUploadURL, bodyParams)
+        .then((response) => response.json())
+        .then((res) => resolve(res.messages))
+    });
+}
+
+export function saveUserProfile(bodyParams) {
+    return new Promise(resolve => {
+        _asyncPostReq(URL + '/users/save', bodyParams)
+        .then(res => resolve(res));
+    })
+}
+
 export function getFriendsInfo(friendList) {
     let infoList = [];
     friendList.forEach((friendId, idx) => {
